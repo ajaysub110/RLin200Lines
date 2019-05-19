@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: bandit-report.aux
+The style file: ieeetr.bst
+Database file #1: cites.bib
+Warning--I didn't find a database entry for "DBLP:conf/ki/Tokic10"
+You've used 1 entry,
+            1876 wiz_defined-function locations,
+            486 strings with 3642 characters,
+and the built_in function-call counts, 192 in all, are:
+= -- 16
+> -- 8
+< -- 0
++ -- 3
+- -- 2
+* -- 11
+:= -- 36
+add.period$ -- 2
+call.type$ -- 1
+change.case$ -- 1
+chr.to.int$ -- 0
+cite$ -- 1
+duplicate$ -- 9
+empty$ -- 21
+format.name$ -- 2
+if$ -- 44
+int.to.chr$ -- 0
+int.to.str$ -- 1
+missing$ -- 2
+newline$ -- 7
+num.names$ -- 1
+pop$ -- 5
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 2
+stack$ -- 0
+substring$ -- 0
+swap$ -- 1
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 1
+width$ -- 2
+write$ -- 12
+(There was 1 warning)
