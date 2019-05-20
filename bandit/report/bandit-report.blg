@@ -3,10 +3,9 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: bandit-report.aux
 The style file: ieeetr.bst
 Database file #1: cites.bib
-Warning--I didn't find a database entry for "DBLP:conf/ki/Tokic10"
 You've used 1 entry,
             1876 wiz_defined-function locations,
-            486 strings with 3642 characters,
+            484 strings with 3602 characters,
 and the built_in function-call counts, 192 in all, are:
 = -- 16
 > -- 8
@@ -45,4 +44,3 @@ warning$ -- 0
 while$ -- 1
 width$ -- 2
 write$ -- 12
-(There was 1 warning)

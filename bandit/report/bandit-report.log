@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.5.7)  20 MAY 2019 01:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.5.7)  20 MAY 2019 21:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -448,18 +448,18 @@ LaTeX Info: Redefining \] on input line 2818.
 (./bandit-report.aux)
 \openout1 = `bandit-report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -530,58 +530,85 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-
-LaTeX Warning: Citation `DBLP:conf/ki/Tokic10' on page 1 undefined on input lin
-e 32.
-
-<images/epsilon-greedy.png, id=1, 987.2082pt x 452.4102pt>
-File: images/epsilon-greedy.png Graphic file (type png)
-<use images/epsilon-greedy.png>
-Package pdftex.def Info: images/epsilon-greedy.png  used on input line 35.
-(pdftex.def)             Requested size: 389.9957pt x 284.52289pt.
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2 <./images/epsilon-greed
-y.png>]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<images/epsilon-greedy.png, id=12, 987.2082pt x 452.4102pt>
+File: images/epsilon-greedy.png Graphic file (type png)
+<use images/epsilon-greedy.png>
+Package pdftex.def Info: images/epsilon-greedy.png  used on input line 37.
+(pdftex.def)             Requested size: 389.9957pt x 284.52289pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+
+ []
+
+[2 <./images/epsilon-greedy.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+
+ []
+
 <images/softmax-action-selection.png, id=18, 987.2082pt x 452.4102pt>
 File: images/softmax-action-selection.png Graphic file (type png)
 <use images/softmax-action-selection.png>
 Package pdftex.def Info: images/softmax-action-selection.png  used on input lin
-e 47.
+e 53.
 (pdftex.def)             Requested size: 389.9957pt x 284.52289pt.
- [3 <./images/softmax-action-selection.png>] [4]
-<images/ucb-1.png, id=29, 462.528pt x 346.896pt>
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
+
+ []
+
+[4 <./images/softmax-action-selection.png>]
+<images/ucb-1.png, id=27, 462.528pt x 346.896pt>
 File: images/ucb-1.png Graphic file (type png)
 <use images/ucb-1.png>
-Package pdftex.def Info: images/ucb-1.png  used on input line 68.
+Package pdftex.def Info: images/ucb-1.png  used on input line 72.
 (pdftex.def)             Requested size: 390.01707pt x 284.54124pt.
- [5 <./images/ucb-1.png>] (./bandit-report.bbl) [6] (./bandit-report.aux)
+ [5]
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
 
-LaTeX Warning: There were undefined references.
+ []
 
- ) 
+
+Underfull \hbox (badness 10000) in paragraph at lines 83--84
+
+ []
+
+[6 <./images/ucb-1.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+
+ []
+
+(./bandit-report.bbl) [7] (./bandit-report.aux) ) 
 Here is how much of TeX's memory you used:
- 2564 strings out of 494880
- 34763 string characters out of 6179602
- 90321 words of memory out of 5000000
- 5845 multiletter control sequences out of 15000+600000
+ 2563 strings out of 494880
+ 34741 string characters out of 6179602
+ 89321 words of memory out of 5000000
+ 5844 multiletter control sequences out of 15000+600000
  10280 words of font info for 37 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 41i,6n,25p,1376b,229s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmti12.pfb>
-Output written on bandit-report.pdf (6 pages, 328452 bytes).
+ 41i,6n,25p,1186b,225s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on bandit-report.pdf (7 pages, 335984 bytes).
 PDF statistics:
- 70 PDF objects out of 1000 (max. 8388607)
- 45 compressed objects within 1 object stream
+ 79 PDF objects out of 1000 (max. 8388607)
+ 52 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
