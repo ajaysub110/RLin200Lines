@@ -6,4 +6,3 @@ Experiments and implementations of Reinforcement learning algorithms
 - [x] Greedy and Epsilon-greedy
 - [x] Softmax action selection
 - [x] UCB 1
-- [ ] Reinforce

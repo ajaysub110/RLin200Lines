@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.5.7)  20 MAY 2019 21:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.5.7)  8 JUN 2019 11:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -581,7 +581,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 83--84
  []
 
 [6 <./images/ucb-1.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 86--87
+Underfull \hbox (badness 10000) in paragraph at lines 89--90
 
  []
 
@@ -605,7 +605,7 @@ fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on bandit-report.pdf (7 pages, 335984 bytes).
+Output written on bandit-report.pdf (7 pages, 337154 bytes).
 PDF statistics:
  79 PDF objects out of 1000 (max. 8388607)
  52 compressed objects within 1 object stream

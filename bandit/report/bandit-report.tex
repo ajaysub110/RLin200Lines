@@ -82,6 +82,9 @@ argmax_j \left(Q(j) + \sqrt{\frac{2\ln(n)}{n_j}}\right)
 
 The first term of the expression accounts for exploitation. We know that, in order to maximize our reward and minimize the regret, we have to take an action with a reward somewhere in the vicinity of the known optimum. Next, at each step, we try to explore in the region by aiming for a slightly higher reward. The second term accounts for this exploration effort. Hence, due to each step of UCB being productive, we can expect it to learn much faster than both $\epsilon$-greedy and softmax, both of which need more time due to separate explore and exploit phases.\\
 
+\section{Effect of a Larger Action Space}
+The major difference in these three algorithms is action selection i.e. the method of deciding and optimizing the explore-exploit decision. However, in the big picture, they work towards a common objective that is arriving at a good estimation for the true reward distribution. This distribution becomes harder to estimate, as the number of arms increases since the agent is left with more options per decision. Therefore all three algorithms share the characteristic that they take more timesteps to figure out the optimal action, as the number of arms increases.
+
 \section{Conclusion}
 From the detailed analyses of three perspectives at solving bandit problems, we have now a better understanding of the deep intuitions involved in their design. We have also analyzed the role of parameters in the functioning of these algorithms and have learnt the expected behavior of these models with varying parameter values.\\
 

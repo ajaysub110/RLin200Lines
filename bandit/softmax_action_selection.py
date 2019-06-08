@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 sns.set()
 
 # global variables
-n_bandits = 2000
-n_arms = 10
+n_bandits = 500
+n_arms = 50
 n_timesteps = 1000
 
 # testbed
@@ -54,7 +54,7 @@ def train(beta, n_bandits=None, n_timesteps=None):
 
             Qt[i,at] = Qt[i,at] + (Rt - Qt[i,at])/(arm_count[at] + 1)
 
-            if j%50 == 0:
+            if j%500==499:
                 print("Bandit: {} Timestep: {} Action: {} Reward: {}".format(i,j,at,Rt))
         rewards.append(bandit_rewards)
         optimal_action.append(bandit_optimal_action)
@@ -64,7 +64,7 @@ def train(beta, n_bandits=None, n_timesteps=None):
 
 fig, (ax1,ax2) = plt.subplots(2,1,sharex=True)
 
-for beta in [0.01,0.1]:
+for beta in [0.1]:
     Qt, rewards, optimal_action = train(beta=beta,n_bandits=n_bandits,n_timesteps=n_timesteps)
     rewards = np.array(rewards)
     optimal_action = np.array(optimal_action)

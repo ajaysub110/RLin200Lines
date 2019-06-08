@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 sns.set()
 
 # global variables
-n_bandits = 2000
-n_arms = 10
+n_bandits = 500
+n_arms = 50
 n_timesteps = 1000
 
 # testbed
@@ -49,7 +49,7 @@ def greedy(epsilon=0, n_bandits=None, n_timesteps=None, Qt=None):
 
             Qt[i,at] = Qt[i,at] + (Rt - Qt[i,at])/(arm_count[at] + 1)
 
-            if j%50 == 0:
+            if j%100 == 0:
                 print("Bandit: {} Timestep: {} Action: {} Reward: {}".format(i,j,at,Rt))
         rewards.append(bandit_rewards)
         optimal_action.append(bandit_optimal_action)
@@ -60,7 +60,7 @@ def greedy(epsilon=0, n_bandits=None, n_timesteps=None, Qt=None):
 # run on varying epsilon values
 fig, (ax1,ax2) = plt.subplots(2,1,sharex=True)
 
-for e in [0.0,0.01,0.1]:
+for e in [0.1]:
     Qt, rewards, optimal_action = greedy(epsilon=e,n_bandits=n_bandits,n_timesteps=n_timesteps)
     rewards = np.array(rewards)
     optimal_action = np.array(optimal_action)
