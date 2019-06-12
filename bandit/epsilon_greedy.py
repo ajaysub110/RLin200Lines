@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 sns.set()
 
 # global variables
-n_bandits = 500
-n_arms = 50
+n_bandits = 2000    
+n_arms = 1000
 n_timesteps = 1000
 
 # testbed
@@ -49,7 +49,7 @@ def greedy(epsilon=0, n_bandits=None, n_timesteps=None, Qt=None):
 
             Qt[i,at] = Qt[i,at] + (Rt - Qt[i,at])/(arm_count[at] + 1)
 
-            if j%100 == 0:
+            if j%1000 == 999:
                 print("Bandit: {} Timestep: {} Action: {} Reward: {}".format(i,j,at,Rt))
         rewards.append(bandit_rewards)
         optimal_action.append(bandit_optimal_action)

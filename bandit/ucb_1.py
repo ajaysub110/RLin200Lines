@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 sns.set()
 
 # global variables
-n_bandits = 500
-n_arms = 50
+n_bandits = 2000
+n_arms = 1000
 n_timesteps = 1000
 
 # testbed
