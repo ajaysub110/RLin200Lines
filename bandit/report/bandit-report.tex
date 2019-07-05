@@ -94,7 +94,7 @@ As the number of arms increases, the trained bandits perform much better (on ave
 The effect discussed above is prevalent in softmax too. But since the softmax distribution biases us towards picking a better arm even in the few-arms case, the effect of more arms is not as pronounced.
 
 \subsection{UCB-1}
-The trend seen in the UCB case is quite different from the other algorithms. In the first 1000 (number of arms) timesteps, it averages a reward of 0 because UCB initially picks each arm once. After that, it starts pulling arms with an optimistic reward expectation. But in a more-arms case, the algorithm behaves more aggressively because at initial timesteps, the $\frac{2\ln(n)}{n_j}$ value is smaller. Due to this, the increase in reward is slower but for more significant over a large number of timesteps.
+The trend seen in the UCB case is quite different from the other algorithms. In the first 1000 (number of arms) timesteps, it averages a reward of 0 because UCB initially picks each arm once. After that, it starts pulling arms with an optimistic reward expectation. But in a more-arms case, the algorithm behaves more aggressively because at initial timesteps, the $\frac{2\ln(n)}{n_j}$ value is smaller. Due to this, the increase in reward is slower but for more significant over a large number of timesteps.\\
 Another interesting observation in the UCB graph is that it has a higher optimal action percentage than the other algorithms. This could be because of the simultaneous exploration-exploitation by UCB i.e taking random actions from an estimated confidence interval rather from the whole action space.
 
 \section{REINFORCE on Contextual Bandits}
