@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{hyperref}
 \graphicspath{ {images/} }
 
 \setlength{\parindent}{0pt}
@@ -39,7 +40,7 @@ The $\epsilon$-Greedy algorithm leaves the explore-exploit decision to a hyperpa
 	\label{fig:epsilon-greedy}
 \end{figure}
 
-As seen in first plot of Figure \ref{fig:epsilon-greedy}, when the algorithm is set to pure exploitation i.e. $\epsilon = 0$, the reward vs time plot sharply increases on the first trial and then stays almost constant throughout. This is because any arm that gives us a positive reward will become the only positive valued arm and hence the 'optimal' one. We will then continue pulling only that arm till the end of the process. This process of learning is entirely random and hence is not reliable at all. Now, if $\epsilon$ is increased to $0.01$, we expect to take a random action $1\%$ of the time. Due to this, we see a sharp increase, followed by a gradual improvement in reward over time. The same trend holds for $\epsilon = 0.1$, but with the maximum possible reward being reached towards the final timesteps. This happens because, with a higher chance of exploration, it becomes easier to find the optimal arm. Hence, the average reward starts becoming more or less constant after timestep $\approx$750. Due to this 'reward saturation', we see the gap between the $\epsilon=0.01$ and $\epsilon=0.1$ curves decreasing towards the end.\\
+As seen in first plot of Figure \ref{fig:epsilon-greedy}, when the algorithm is set to pure exploitation i.e. $\epsilon = 0$, the reward vs time plot sharply increases on the first trial and then stays almost constant throughout. This is because any arm that gives us a positive reward will become the only positive valued arm and hence the 'optimal' one. We will then continue pulling only that arm till the end of the process. This process of learning is entirely random and hence is not very reliable. Now, if $\epsilon$ is increased to $0.01$, we expect to take a random action $1\%$ of the time. Due to this, we see a sharp increase, followed by a gradual improvement in reward over time. The same trend holds for $\epsilon = 0.1$, but with the maximum possible reward being reached towards the final timesteps. This happens because, with a higher chance of exploration, it becomes easier to find the optimal arm. Hence, the average reward starts becoming more or less constant after timestep $\approx$750. Due to this 'reward saturation', we see the gap between the $\epsilon=0.01$ and $\epsilon=0.1$ curves decreasing towards the end.\\
 
 This observation could also be explained from the perspective of explore-exploit tradeoffs. Whereas $\epsilon=0.1$ curve identifies the optimal arm faster and continues to randomize its actions even after that, the $\epsilon=0.01$ plot takes time to figure out the best arm, but almost always pulls that arm once it does.\\
 
@@ -82,8 +83,31 @@ argmax_j \left(Q(j) + \sqrt{\frac{2\ln(n)}{n_j}}\right)
 
 The first term of the expression accounts for exploitation. We know that, in order to maximize our reward and minimize the regret, we have to take an action with a reward somewhere in the vicinity of the known optimum. Next, at each step, we try to explore in the region by aiming for a slightly higher reward. The second term accounts for this exploration effort. Hence, due to each step of UCB being productive, we can expect it to learn much faster than both $\epsilon$-greedy and softmax, both of which need more time due to separate explore and exploit phases.\\
 
-\section{Effect of a Larger Action Space}
-The major difference in these three algorithms is action selection i.e. the method of deciding and optimizing the explore-exploit decision. However, in the big picture, they work towards a common objective that is arriving at a good estimation for the true reward distribution. This distribution becomes harder to estimate, as the number of arms increases since the agent is left with more options per decision. Therefore all three algorithms share the characteristic that they take more timesteps to figure out the optimal action, as the number of arms increases.
+\section{Effect of a Larger Action Space \footnote{Graphs corresponding to this section can be accessed \href{https://github.com/ajaysub110/RL-experiments/tree/master/bandit/viz}{here}}}
+The major difference in these three algorithms is action selection i.e. the method of deciding and optimizing the explore-exploit decision. However, in the big picture, they work towards a common objective that is arriving at a good estimation for the true reward distribution. This distribution becomes harder to estimate, as the number of arms increases since the agent is left with more options per decision. Therefore all three algorithms share the characteristic that they take more timesteps to figure out the optimal action, as the number of arms increases.There are however, a few differences in the trend followed by each algorithm
+
+\subsection{$\epsilon$-Greedy}
+
+As the number of arms increases, the trained bandits perform much better (on average) than the case with fewer arms, though they take longer to get trained. This could be because having more arms (with values picked from a common distribution) results in a lower probability of a few bad arms being picked. But in the few arms case, one bad arm could easily be picked since the sample size is much smaller.
+
+\subsection{Softmax}
+The effect discussed above is prevalent in softmax too. But since the softmax distribution biases us towards picking a better arm even in the few-arms case, the effect of more arms is not as pronounced.
+
+\subsection{UCB-1}
+The trend seen in the UCB case is quite different from the other algorithms. In the first 1000 (number of arms) timesteps, it averages a reward of 0 because UCB initially picks each arm once. After that, it starts pulling arms with an optimistic reward expectation. But in a more-arms case, the algorithm behaves more aggressively because at initial timesteps, the $\frac{2\ln(n)}{n_j}$ value is smaller. Due to this, the increase in reward is slower but for more significant over a large number of timesteps.
+Another interesting observation in the UCB graph is that it has a higher optimal action percentage than the other algorithms. This could be because of the simultaneous exploration-exploitation by UCB i.e taking random actions from an estimated confidence interval rather from the whole action space.
+
+\section{REINFORCE on Contextual Bandits}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth, height=10cm]{reinforce.png}
+	\caption{reward vs time for REINFORCE on a Contextual Bandit problem}
+	\label{fig:reinforce}
+\end{figure}
+ 
+A contextual bandit problem is a problem that is modelled using different bandits (different distributions) for different states. When encountered with a particular state, we pick an action corresponding to our estimation of the expected reward of only that bandit (state). Contextual bandits are an acceptable formulation when we have states that are independent of each other i.e which is a more extreme assumption than the Markov assumption, and not always true in real world environments.\\
+REINFORCE works by ascending the gradient of the estimated reward function. However, it may encounter local maxima or saddle points in its journey to the global maximum. Hence, the reward vs time graph as seen in Figure \ref{fig:reinforce} may not always be a monotonically increasing graph (unlike the algorithms seen so far).
+The speed of convergence is determined by the step size. Too small a step size makes it slow while a very large one might result in an oscillation in the reward function.\\
+An advantage of REINFORCE (or any policy gradient method) is that they can be modelled using a MLP, whence a sequence of linear operations with non-linear activation functions can result in complex function approximation capabilities.\\
 
 \section{Conclusion}
 From the detailed analyses of three perspectives at solving bandit problems, we have now a better understanding of the deep intuitions involved in their design. We have also analyzed the role of parameters in the functioning of these algorithms and have learnt the expected behavior of these models with varying parameter values.\\

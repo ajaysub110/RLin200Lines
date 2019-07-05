@@ -9,7 +9,7 @@ sns.set()
 # global variables
 n_bandits = 2000
 n_arms = 1000
-n_timesteps = 1000
+n_timesteps = 2000
 
 # testbed
 mean_rewards = np.array([np.random.normal(size=n_arms) for i in range(n_bandits)])
