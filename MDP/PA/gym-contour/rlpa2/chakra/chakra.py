@@ -26,6 +26,10 @@ class chakra(Env):
     def step(self, action):
         #Fill your code here
         dx,dy = action 
+        dx = max(dx,-0.025)
+        dx = min(dx,0.025)
+        dy = max(dy,-0.025)
+        dy = min(dy,0.025)
         self.state = self.state[0]+dx,self.state[1]+dy 
         
         if True in [el>self.observation_space.high[i] or el<self.observation_space.low[i] for i,el in enumerate(self.state)]:
