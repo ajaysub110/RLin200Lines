@@ -1,0 +1,3 @@
+report/
+*.egg-info
+.vscode
