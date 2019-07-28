@@ -1,3 +1,2 @@
-report/
-*.egg-info
-.vscode
+**/report
+**/*.egg-info
