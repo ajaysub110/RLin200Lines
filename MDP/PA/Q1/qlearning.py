@@ -56,7 +56,7 @@ for k in range(N_RUNS): # Run
         print()
     print()
 
-print(q_table)
+print(np.argmax(q_table,axis=1))
 
 # Plot learning curves
 fig, (ax1,ax2) = plt.subplots(2,1,sharex=True)

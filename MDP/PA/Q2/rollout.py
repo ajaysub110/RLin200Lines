@@ -12,7 +12,7 @@ def include_bias(ob):
 def get_action(theta, ob, rng=np.random):
     ob_1 = include_bias(ob)
     mean = theta.dot(ob_1)
-    return rng.normal(loc=mean, scale=1.0)
+    return rng.normal(loc=mean, scale=0.1)
 
 def get_grad_log_pi(ob,a,theta):
     ob_1 = np.reshape(include_bias(ob),(3,1))
@@ -29,7 +29,7 @@ def discount_rewards(r,gamma):
     
 
 @click.command()
-@click.argument("env_id", type=str, default="chakra")
+@click.argument("env_id", type=str, default="vishamC")
 def main(env_id):
     # Register the environment
     rng = np.random.RandomState(42)

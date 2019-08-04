@@ -61,6 +61,7 @@ for k in range(N_RUNS):
         print()
     print()
 
+print(np.argmax(q_table,axis=1))
 print(q_table)
 
 # Plot learning curves

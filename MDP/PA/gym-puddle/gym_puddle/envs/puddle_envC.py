@@ -62,7 +62,7 @@ class PuddleEnvC(gym.Env):
         elif self.S==(4,6):
             return self.S,-3,False,{}
 
-        return self.S,0,False,{}
+        return self.S,-0.25,False,{}
 
     def reset(self):
         self.S = random.choices([5,6,10,11])[0],0
