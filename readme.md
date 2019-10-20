@@ -16,6 +16,9 @@ Implementations of classical and modern reinforcement learning algorithms.
     - [x] Q-learning
     - [x] SARSA(lambda)
     - [x] Vanilla Policy Gradient
+    
+3. **Deep Reinforcement Learning**
+    - [x] [Soft Actor-Critic](https://github.com/ajaysub110/sac-pytorch)
 
 3. **Additional Resources**
     - [x] Report on Bandit algorithms
