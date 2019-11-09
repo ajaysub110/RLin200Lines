@@ -1,4 +1,4 @@
-# Reinforcement Learning Algorithm implementations in PyTorch
+# PyTorch implementations of RL algorithms
 Implementations of classical and deep reinforcement learning algorithms.
 
 ## Algorithms:
