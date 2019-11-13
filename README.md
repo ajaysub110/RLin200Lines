@@ -4,6 +4,7 @@ Implementations of classical and deep reinforcement learning algorithms.
 ## Algorithms:
 
 1. **Deep Reinforcement Learning**
+    - DQN
     - Soft Actor-Critic (without value function network)
 
 2. **Bandits**
