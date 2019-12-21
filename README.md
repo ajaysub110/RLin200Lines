@@ -5,7 +5,7 @@ Implementations of classical and deep reinforcement learning algorithms.
 
 1. **Deep Reinforcement Learning**
     - DQN
-    - Soft Actor-Critic (without value function network)
+    - Soft Actor-Critic
 
 2. **Bandits**
     - Epsilon Greedy
