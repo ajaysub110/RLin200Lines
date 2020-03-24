@@ -2,7 +2,7 @@
 Vanilla Policy Gradient
 
 STEPS:
-1. Imports: autograd.Variable, tqdm, gym
+1. Imports: autograd.Variable, gym
 2. Make env, set seeds for env and torch
 3. Hyperparameters: lr=0.01, gamma=0.99
 4. PolicyNet: n_h=128, book keeping stuff within
@@ -19,6 +19,9 @@ STEPS:
             book keeping
 9. plot results
 """
+
+# TODO: replace reward with advantage estimate
+# TODO: batch of trajectories
 
 # 1
 import numpy as np
@@ -67,21 +70,50 @@ class PolicyNet(nn.Module):
 
         return model(x)
 
+class ValueNet(nn.Module):
+    def __init__(self):
+        super(ValueNet, self).__init__()
+
+        self.state_space = env.observation_space.shape[0]
+
+        self.fc1 = nn.Linear(self.state_space,128)
+        self.fc2 = nn.Linear(128,1)
+
+        self.value_hist = Variable(torch.Tensor())
+        self.loss_hist = []
+
+    def forward(self, x):
+        model = nn.Sequential(
+            self.fc1,
+            nn.ReLU(),
+            nn.Dropout(p=0.6),
+            self.fc2
+        )
+
+        return model(x)
+
 # 5
 policy = PolicyNet()
-optimizer = opt.Adam(policy.parameters(),lr=lr)
-writer = SummaryWriter()
+value = ValueNet()
+optimizer_policy = opt.Adam(policy.parameters(),lr=lr)
+optimizer_value = opt.Adam(value.parameters(),lr=lr)
+tb = True
+if tb:
+    writer = SummaryWriter()
 
 # 6
 def select_action(s):
     state = torch.from_numpy(s).type(torch.FloatTensor)
     
-    state = policy(Variable(state))
-    c = Categorical(probs=state)
+    probs = policy(Variable(state))
+    val = value(Variable(state))
+    c = Categorical(probs=probs)
     action = c.sample()
     
     policy.policy_hist = torch.cat([
         policy.policy_hist,c.log_prob(action).unsqueeze(0)])
+    value.value_hist = torch.cat([
+        value.value_hist,val])
 
     return action
 
@@ -98,16 +130,25 @@ def update_policy():
     returns = (returns - returns.mean()) / (
         returns.std() + np.finfo(np.float32).eps)
 
-    loss = torch.sum(torch.mul(
-        policy.policy_hist,Variable(returns)).mul(-1), -1).unsqueeze(0)
+    loss_policy = torch.sum(torch.mul(
+        policy.policy_hist,Variable(returns)-Variable(value.value_hist)
+        ).mul(-1), -1).unsqueeze(0)
 
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+    loss_value = nn.MSELoss()(value.value_hist, returns).unsqueeze(0)
 
-    policy.loss_hist.append(loss.item())
+    optimizer_policy.zero_grad()
+    loss_policy.backward()
+    optimizer_policy.step()
+
+    optimizer_value.zero_grad()
+    loss_value.backward()
+    optimizer_value.step()
+
+    policy.loss_hist.append(loss_policy.item())
+    value.loss_hist.append(loss_value.item())
     policy.reward_hist.append(np.sum(policy.episode_reward))
     policy.policy_hist = Variable(torch.Tensor())
+    value.value_hist = Variable(torch.Tensor())
     policy.episode_reward = []
 
 # 8
@@ -127,11 +168,12 @@ def main():
         episode_reward = np.sum(policy.episode_reward)
         update_policy()
 
-        if ep % 20 == 0:
+        if ep % 20 == 0 and tb == True:
             print("Episode: {}, reward: {}, duration: {}".format(
                 ep, episode_reward,t
             ))
             writer.add_scalar('reward',episode_reward,ep)
 
 main()
-writer.close()
+if tb:
+    writer.close()
