@@ -39,7 +39,8 @@ env.seed(1)
 torch.manual_seed(1)
 
 # 3
-lr = 0.01
+lr_p = 0.01
+lr_v = 0.0005
 gamma = 0.99
 
 # 4
@@ -76,8 +77,8 @@ class ValueNet(nn.Module):
 
         self.state_space = env.observation_space.shape[0]
 
-        self.fc1 = nn.Linear(self.state_space,128)
-        self.fc2 = nn.Linear(128,1)
+        self.fc1 = nn.Linear(self.state_space,32)
+        self.fc2 = nn.Linear(32,1)
 
         self.value_hist = Variable(torch.Tensor())
         self.loss_hist = []
@@ -95,8 +96,8 @@ class ValueNet(nn.Module):
 # 5
 policy = PolicyNet()
 value = ValueNet()
-optimizer_policy = opt.Adam(policy.parameters(),lr=lr)
-optimizer_value = opt.Adam(value.parameters(),lr=lr)
+optimizer_policy = opt.Adam(policy.parameters(),lr=lr_p)
+optimizer_value = opt.Adam(value.parameters(),lr=lr_v)
 tb = True
 if tb:
     writer = SummaryWriter()
@@ -118,7 +119,7 @@ def select_action(s):
     return action
 
 # 7
-def update_policy():
+def update_policy(ep):
     returns = []
     R = 0
 
@@ -133,8 +134,10 @@ def update_policy():
     loss_policy = torch.sum(torch.mul(
         policy.policy_hist,Variable(returns)-Variable(value.value_hist)
         ).mul(-1), -1).unsqueeze(0)
+    writer.add_scalar('loss/policy',loss_policy.item(),ep)
 
     loss_value = nn.MSELoss()(value.value_hist, returns).unsqueeze(0)
+    writer.add_scalar('loss/value',loss_value.item(),ep)
 
     optimizer_policy.zero_grad()
     loss_policy.backward()
@@ -153,7 +156,7 @@ def update_policy():
 
 # 8
 def main():
-    for ep in range(500):
+    for ep in range(1000):
         s = env.reset()
         done = False
         for t in range(1000):
@@ -166,7 +169,7 @@ def main():
                 break
 
         episode_reward = np.sum(policy.episode_reward)
-        update_policy()
+        update_policy(ep)
 
         if ep % 20 == 0 and tb == True:
             print("Episode: {}, reward: {}, duration: {}".format(
