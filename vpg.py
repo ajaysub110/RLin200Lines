@@ -1,49 +1,31 @@
 """
 Vanilla Policy Gradient
-
-STEPS:
-1. Imports: autograd.Variable, gym
-2. Make env, set seeds for env and torch
-3. Hyperparameters: lr=0.01, gamma=0.99
-4. PolicyNet: n_h=128, book keeping stuff within
-5. Instantiate policy and optimizer
-6. select_action: stochastic policy using Categorical
-7. update_policy: calculate returns, scale returns, calculate loss, update network
-8. training loop: 
-    for each episode (1000):
-        for each timestep (1000):
-            select action
-            take action
-            save reward
-            update policy
-            book keeping
-9. plot results
+PyTorch implementation of Vanilla Policy Gradient (Actor-Critic) with value function baselines and deep networks for policy
+and value function parameters.
 """
 
-# TODO: replace reward with advantage estimate
-# TODO: batch of trajectories
-
-# 1
+# Imports
 import numpy as np
 import torch
 import torch.nn as nn 
 import torch.optim as opt 
-from torch.autograd import Variable
-from torch.distributions import Categorical
+from torch.autograd import Variable # wrapper on tensor to enable backprop
+from torch.distributions import Categorical # creates distribution to sample from
 import gym
 from torch.utils.tensorboard import SummaryWriter
 
-# 2
-env = gym.make('CartPole-v1')
+# Create env and set env and torch seeds
+env = gym.make('CartPole-v1') # CartPole-v1 is v0 with more max_steps (500 vs 200)
 env.seed(1)
 torch.manual_seed(1)
 
-# 3
+# Training hyperparameters
 lr_p = 0.01
 lr_v = 0.0005
 gamma = 0.99
+batch_size = 4
 
-# 4
+# Policy network
 class PolicyNet(nn.Module):
     def __init__(self):
         super(PolicyNet,self).__init__()
@@ -55,10 +37,9 @@ class PolicyNet(nn.Module):
         self.fc2 = nn.Linear(128,self.action_space)
 
         self.gamma = gamma
-        self.policy_hist = Variable(torch.Tensor())
-        self.episode_reward = []
-        self.loss_hist = []
-        self.reward_hist = []
+        self.policy_hist = Variable(torch.Tensor()) # policy history for trajectory
+        self.traj_reward = []
+        self.loss_hist = Variable(torch.Tensor()) # loss history for each traj in episode
 
     def forward(self, x):
         model = nn.Sequential(
@@ -80,8 +61,8 @@ class ValueNet(nn.Module):
         self.fc1 = nn.Linear(self.state_space,32)
         self.fc2 = nn.Linear(32,1)
 
-        self.value_hist = Variable(torch.Tensor())
-        self.loss_hist = []
+        self.value_hist = Variable(torch.Tensor()) # policy history for trajectory
+        self.loss_hist = Variable(torch.Tensor()) # loss history for each traj in episode
 
     def forward(self, x):
         model = nn.Sequential(
@@ -93,24 +74,24 @@ class ValueNet(nn.Module):
 
         return model(x)
 
-# 5
+# Instantiate networks and optimizers
 policy = PolicyNet()
 value = ValueNet()
 optimizer_policy = opt.Adam(policy.parameters(),lr=lr_p)
 optimizer_value = opt.Adam(value.parameters(),lr=lr_v)
-tb = True
+tb = True # use tensorboard?
 if tb:
     writer = SummaryWriter()
 
-# 6
+# stochastic policy
 def select_action(s):
     state = torch.from_numpy(s).type(torch.FloatTensor)
-    
     probs = policy(Variable(state))
     val = value(Variable(state))
-    c = Categorical(probs=probs)
-    action = c.sample()
+    c = Categorical(probs=probs) # form discrete distribution with PolicyNet output as probs
+    action = c.sample() # sample action from distribution
     
+    # store log probabilities and value function
     policy.policy_hist = torch.cat([
         policy.policy_hist,c.log_prob(action).unsqueeze(0)])
     value.value_hist = torch.cat([
@@ -118,27 +99,54 @@ def select_action(s):
 
     return action
 
-# 7
-def update_policy(ep):
+# compute losses for current trajectories
+def get_traj_loss():
     returns = []
     R = 0
-
-    for r in policy.episode_reward[::-1]:
+    
+    # calculate discounted returns
+    for r in policy.traj_reward[::-1]:
         R = r + policy.gamma * R 
         returns.insert(0,R)
 
+    # scale returns
     returns = torch.FloatTensor(returns)
     returns = (returns - returns.mean()) / (
         returns.std() + np.finfo(np.float32).eps)
 
+    # calculate trajectory losses
     loss_policy = torch.sum(torch.mul(
         policy.policy_hist,Variable(returns)-Variable(value.value_hist)
         ).mul(-1), -1).unsqueeze(0)
-    writer.add_scalar('loss/policy',loss_policy.item(),ep)
 
     loss_value = nn.MSELoss()(value.value_hist, returns).unsqueeze(0)
-    writer.add_scalar('loss/value',loss_value.item(),ep)
 
+    # store loss values
+    policy.loss_hist = torch.cat([
+        policy.loss_hist, loss_policy
+    ])
+
+    value.loss_hist = torch.cat([
+        value.loss_hist, loss_value
+    ])
+
+    # clear traj_reward and policy and value histories
+    policy.traj_reward = []
+    policy.policy_hist = Variable(torch.Tensor())
+    value.value_hist = Variable(torch.Tensor())
+
+# network update after every batch of trajectories (end of episode)
+def update_policy(ep):
+    # compute episode loss from traj losses
+    loss_policy = torch.mean(policy.loss_hist)
+    loss_value = torch.mean(value.loss_hist)
+
+    # tensorboard book keeping
+    if tb:
+        writer.add_scalar('loss/policy',loss_policy,ep)
+        writer.add_scalar('loss/value',loss_value,ep)
+
+    # take gradient steps
     optimizer_policy.zero_grad()
     loss_policy.backward()
     optimizer_policy.step()
@@ -147,35 +155,37 @@ def update_policy(ep):
     loss_value.backward()
     optimizer_value.step()
 
-    policy.loss_hist.append(loss_policy.item())
-    value.loss_hist.append(loss_value.item())
-    policy.reward_hist.append(np.sum(policy.episode_reward))
-    policy.policy_hist = Variable(torch.Tensor())
-    value.value_hist = Variable(torch.Tensor())
-    policy.episode_reward = []
+    # re-initialize loss histories
+    policy.loss_hist = Variable(torch.Tensor())
+    value.loss_hist = Variable(torch.Tensor())
 
 # 8
 def main():
-    for ep in range(1000):
-        s = env.reset()
-        done = False
-        for t in range(1000):
-            a = select_action(s)
-            s, r, done, _ = env.step(a.item())
+    for ep in range(1000): # episodes
+        episode_reward = 0
+        for i in range(batch_size): # batch of trajectories
+            s = env.reset()
+            done = False
+            for t in range(1000): # trajectory
+                a = select_action(s)
+                s, r, done, _ = env.step(a.item()) # take step in env
 
-            policy.episode_reward.append(r)
+                policy.traj_reward.append(r) # store traj reward
 
-            if done:
-                break
+                if done:
+                    break
 
-        episode_reward = np.sum(policy.episode_reward)
-        update_policy(ep)
+            episode_reward += np.sum(policy.traj_reward)/batch_size # add to average episode reward
+            get_traj_loss() # compute traj losses
 
-        if ep % 20 == 0 and tb == True:
-            print("Episode: {}, reward: {}, duration: {}".format(
-                ep, episode_reward,t
+        update_policy(ep) # one step with computed losses
+
+        if ep % 20 == 0:
+            print("Episode: {}, reward: {}".format(
+                ep, episode_reward
             ))
-            writer.add_scalar('reward',episode_reward,ep)
+            if tb:
+                writer.add_scalar('reward',episode_reward,ep)
 
 main()
 if tb:
