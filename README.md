@@ -1,3 +1,8 @@
 # Deep RL implementations
 
-1) **Vanilla Policy Gradient**: Value Baseline (Actor-Critic), Deep network policy and value function
+## Vanilla Policy Gradient
+Value function baseline (Actor-Critic), Deep network policy and value function.
+
+`runs/vpg_0`: No batch, no baseline
+`runs/vpg_1`: No batch, value function baseline
+`runs/vpg_2`: batch update, value function baseline
