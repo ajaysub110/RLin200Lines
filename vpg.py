@@ -126,7 +126,7 @@ def get_traj_loss():
         -1,
     ).unsqueeze(0)
 
-    loss_value = nn.MSELoss()(value.value_hist, returns).unsqueeze(0)
+    loss_value = nn.MSELoss()(value.value_hist, Variable(returns)).unsqueeze(0)
 
     # store loss values
     policy.loss_hist = torch.cat([policy.loss_hist, loss_policy])
