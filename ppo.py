@@ -10,10 +10,12 @@ from torch.utils.tensorboard import SummaryWriter
 env = gym.make('CartPole-v1')
 env.seed(42)
 torch.manual_seed(42)
+print(torch.cuda.is_available())
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-lr_p = 0.01
-lr_v = 0.01
-gamma = 0.98
+lr_p = 0.001
+lr_v = 0.005
+gamma = 0.99
 batch_size = 8
 epsilon = 0.2
 copy_interval = 20
@@ -25,8 +27,9 @@ class PolicyNet(nn.Module):
         self.state_space = env.observation_space.shape[0]
         self.action_space = env.action_space.n 
 
-        self.fc1 = nn.Linear(self.state_space,128)
-        self.fc2 = nn.Linear(128,self.action_space)
+        self.fc1 = nn.Linear(self.state_space,24)
+        self.fc2 = nn.Linear(24,24)
+        self.fc3 = nn.Linear(24,self.action_space)
 
         self.gamma = gamma
         self.policy_hist = Variable(torch.Tensor())
@@ -37,8 +40,9 @@ class PolicyNet(nn.Module):
         model = nn.Sequential(
             self.fc1,
             nn.ReLU(),
-            nn.Dropout(p=0.6),
             self.fc2,
+            nn.ReLU(),
+            self.fc3,
             nn.Softmax(dim=-1)
         )
 
@@ -50,8 +54,8 @@ class ValueNet(nn.Module):
 
         self.state_space = env.observation_space.shape[0]
 
-        self.fc1 = nn.Linear(self.state_space,128)
-        self.fc2 = nn.Linear(128,1)
+        self.fc1 = nn.Linear(self.state_space,24)
+        self.fc2 = nn.Linear(24,1)
 
         self.value_hist = Variable(torch.Tensor())
         self.loss_hist = Variable(torch.Tensor())
@@ -60,15 +64,14 @@ class ValueNet(nn.Module):
         model = nn.Sequential(
             self.fc1,
             nn.ReLU(),
-            nn.Dropout(p=0.6),
             self.fc2
         )
 
         return model(x)
 
-policy_new, policy_old = PolicyNet(), PolicyNet()
+policy_new, policy_old = PolicyNet().to(device), PolicyNet().to(device)
 policy_old.load_state_dict(policy_new.state_dict())
-value = ValueNet()
+value = ValueNet().to(device)
 optimizer_policy = opt.Adam(policy_new.parameters(),lr=lr_p)
 optimizer_value = opt.Adam(value.parameters(), lr=lr_v)
 tb = True 
@@ -76,7 +79,7 @@ if tb:
     writer = SummaryWriter()
 
 def select_action(s):
-    state = torch.from_numpy(s).type(torch.FloatTensor)
+    state = torch.from_numpy(s).type(torch.FloatTensor).to(device)
     
     probs_old = policy_old(Variable(state))
     probs_new = policy_new(Variable(state))
@@ -104,13 +107,13 @@ def get_traj_loss():
         R = r + policy_old.gamma * R
         returns.insert(0,R)
 
-    returns = torch.FloatTensor(returns)
+    returns = torch.FloatTensor(returns).to(device)
     #returns = (returns - returns.mean()) / (returns.std() + np.finfo(np.float32).eps)
     A = Variable(returns) - Variable(value.value_hist)
-    g = A + torch.mul(torch.sign(A), epsilon)
     ratio = torch.div(policy_new.policy_hist, policy_old.policy_hist)
+    clipping = torch.clamp(ratio, 1-epsilon, 1+epsilon).mul(A).to(device)
 
-    loss_policy = torch.mean(torch.min(torch.mul(ratio, A), g)).mul(-1).unsqueeze(0)
+    loss_policy = torch.mean(torch.min(torch.mul(ratio, A), clipping)).mul(-1).unsqueeze(0)
     loss_value = nn.MSELoss()(value.value_hist, Variable(returns)).unsqueeze(0)
 
     policy_new.loss_hist = torch.cat([policy_new.loss_hist, loss_policy])
