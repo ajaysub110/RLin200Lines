@@ -19,7 +19,7 @@ env = gym.make("CartPole-v1")
 env.seed(42)
 torch.manual_seed(42)
 print(torch.cuda.is_available())
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 # Training hyperparameters
 lr_p = 0.001
@@ -80,7 +80,7 @@ policy_old.load_state_dict(policy_new.state_dict())
 value = ValueNet().to(device)
 optimizer_policy = opt.Adam(policy_new.parameters(), lr=lr_p)
 optimizer_value = opt.Adam(value.parameters(), lr=lr_v)
-tb = True
+tb = False
 if tb:
     writer = SummaryWriter()
 
