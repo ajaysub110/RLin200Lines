@@ -8,6 +8,7 @@ PyTorch implementations of Reinforcement Learning algorithms in less than 200 li
     - Soft Actor-Critic (SAC) [[Results]](https://drive.google.com/open?id=1rrzC4DigBsKWXv9YVmV0jI1vhstnwFKd)
     - Vanilla Policy Gradient (Actor-Critic) [[Results]](https://drive.google.com/open?id=1T9rqRIfZcCe61h2Ib-Q9Fyf2A-B9th2A)
     - Proximal Policy Optimization (PPO) [[Results]](https://drive.google.com/open?id=1zb6bt5RSZUnCTRw8crWPypXHkiECyRG4)
+    - Deep Deterministic Policy Gradient (DDPG) [[Results]](https://drive.google.com/open?id=1IS06f5od8-mNvi9oaSlIOqFZoxJpdNcx)
 
 2. **Bandits**
     - Epsilon Greedy
@@ -55,4 +56,7 @@ PyTorch implementations of Reinforcement Learning algorithms in less than 200 li
 - **Policy Gradient Methods for Reinforcement Learning with Function Approximation**, (1999) [[bib]](./bibtex.bib#L67-L72)  by *Richard S. Sutton, David A. McAllester, Satinder P. Singh and Yishay Mansour*
 
 - **Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning**, (1992) [[bib]](./bibtex.bib#L33-L40)  by *Ronald J. Williams*
+
 - **Q-learning**, (1992) [[bib]](./bibtex.bib#L51-L58)  by *Chris Watkins and Peter Dayan*
+
+- **Deterministic Policy Gradient Algorithms**, (2014) [[bib]](../bibtex.bib#L74-L79)  by *David Silver, Guy Lever, Nicolas Manfred Otto Heess, Thomas Degris, Daan Wierstra and Martin A. Riedmiller*
