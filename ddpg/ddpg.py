@@ -8,6 +8,9 @@ import gym
 from copy import deepcopy
 from collections import deque
 import random
+import time
+
+start_time = time.time()
 
 # hyperparameters
 seed = 0
@@ -17,14 +20,15 @@ gamma = 0.99
 lr_p = 0.001
 lr_q = 0.001
 polyak = 0.995
-epochs = 100
+epochs = 3
 start_steps = 10000
 steps_per_epoch = 4000
 noise_std = 0.1
 max_ep_len = 1000
 update_after = 1000
 update_every = 50
-tb = True
+tb = False
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # set seeds
 torch.manual_seed(seed)
@@ -97,8 +101,8 @@ class ActorCritic(nn.Module):
         with torch.no_grad():
             return self.p(s).numpy()
 
-agent = ActorCritic(env.observation_space, env.action_space)
-agent_targ = deepcopy(agent)
+agent = ActorCritic(env.observation_space, env.action_space).to(device)
+agent_targ = deepcopy(agent).to(device)
 
 for p in agent_targ.parameters():
     p.requires_grad = False
@@ -114,7 +118,7 @@ class ReplayBuffer:
     def sample(self, batch_size):
         batch = random.sample(self.memory, batch_size)
         state, action, reward, next_state, done = map(np.stack, zip(*batch))
-        return (torch.as_tensor(v,dtype=torch.float32) for v in [state, action, reward, next_state, done])
+        return (torch.as_tensor(v,dtype=torch.float32, device=device) for v in [state, action, reward, next_state, done])
 
     def get_len(self):
         return len(self.memory)
@@ -162,7 +166,7 @@ def update_params(s,a,r,s1,d):
             p_targ.data.add_((1-polyak)*p.data)
 
 def get_action(s, noise):
-    a = agent.select_action(torch.as_tensor(s,dtype=torch.float32))
+    a = agent.select_action(torch.as_tensor(s,dtype=torch.float32, device=device))
     a += noise * np.random.randn(action_space)
     return np.clip(a, -action_limit, action_limit)
 
@@ -208,3 +212,7 @@ for t in range(total_steps):
 if tb:
     writer.close()
 env.close()
+
+end_time = time.time()
+
+print(end_time - start_time)
